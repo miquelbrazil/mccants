@@ -1,0 +1,28 @@
+name: mccants-boys-can
+env_file:
+  - .env
+services:
+  site:
+    type: php:8.2
+    via: apache
+    ssl: true
+    webroot: web
+    composer_version: 2-latest
+    build_as_root:
+      - a2enmod headers
+    build:
+      - composer update
+proxy:
+  site:
+    - mccantsboyscan.loc
+tooling:
+  php:
+    service: site
+    cmd: php
+  composer:
+    service: site
+    cmd: composer
+    description: "Run Composer commands"
+  console:
+    service: site
+    cmd: bin/console
